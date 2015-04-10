@@ -1,0 +1,17 @@
+<html>
+<body>
+<h3>Coucou</h3>
+<a href='test.html?param1=value'>coucou href</a>
+
+<script type="text/javascript">
+  (function() {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.async = true;
+    script.src = '/static/javascript/kokua.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
