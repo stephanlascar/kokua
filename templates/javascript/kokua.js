@@ -1,14 +1,21 @@
-var kokuaObject = kokuaObject || (function() {
-	var instance = null;
+var KokuaObject = (function () {
+    var Kokua = function () {
 
-	function Kokua() {
-		
-		var xhr = new XMLHttpRequest();
-		
-		this.init = function(siteId) {
+        var xhr = new XMLHttpRequest();
+
+        this.init = function(siteId) {
             if (!getCookie('first_visit')) {
                 setCookie('js_id', randomId());
-                var params = 'resolution=' + screen.width + 'x' + screen.height + '&lang=' + (navigator.language || navigator.browserLanguage || '').substr(0, 2) + '&protocol=' + location.protocol.substr(0, location.protocol.length - 1) + '&port=' + location.port + '&domain=' + location.hostname + '&href=' + encodeURIComponent(location.pathname + location.search) + '&param=' + location.search + '&referer=' + encodeURIComponent(location.origin);
+                var params = {
+                    resolution: {width: screen.width, height: screen.height},
+                    lang: (navigator.language || navigator.browserLanguage || '').substr(0, 2),
+                    protocol: location.protocol.substr(0, location.protocol.length - 1),
+                    port: location.port,
+                    domain: location.hostname,
+                    href: encodeURIComponent(location.pathname + location.search),
+                    param: location.search,
+                    referer: encodeURIComponent(location.origin)
+                };
                 sendParams(params);
             }
             setCookie('first_visit', false, 60 * 15);
@@ -17,25 +24,40 @@ var kokuaObject = kokuaObject || (function() {
 
             this.siteId = siteId;
             this.jsId = getCookie('js_id');
-		};
+        };
 
         this.startTracker = function () {
             var that = this;
             document.onmousemove = debounce(function (event) {
-                var params = 'type=mouse_move&mouse_position_x=' + event.clientX + '&mouse_position_y=' + event.clientY;
+                var params = {
+                    type: 'mouse_move',
+                    position: {
+                        x: event.clientX,
+                        y: event.clientY
+                    }
+                };
                 sendParams.call(that, params);
             }, 100);
 
             document.onclick = function (event) {
-                var params = 'type=' + event.type + '&target=' + event.target.localName + '&mouse_position_x=' + event.clientX + '&mouse_position_y=' + event.clientY;
+                var params = {
+                    type: event.type,
+                    target: event.target.localName,
+                    position: {
+                        x: event.clientX,
+                        y: event.clientY
+                    }
+                };
                 sendParams.call(that, params);
             }
         };
 
         function sendParams(params) {
             xhr.open('POST', '/sauron');
-            xhr.setRequestHeader('Content-type', 'application/x-url-encoded');
-            xhr.send('site_id=' + this.siteId + '&js_id=' + this.jsId + '&' + params);
+            xhr.setRequestHeader('Content-type', 'application/json;charset=UTF-8');
+            params.site_id = this.siteId;
+            params.js_id = this.jsId;
+            xhr.send(JSON.stringify(params));
         }
 
         function getCookie(name) {
@@ -73,18 +95,21 @@ var kokuaObject = kokuaObject || (function() {
                 }, delay);
             };
         }
-		
-	}
-	
-	return function() {
-		this.getInstance = function() {
-			if (instance == null) {
-				instance = new Kokua();
-			}
-			return instance;
-		}
-	}
+    };
+
+    var instance = null;
+    return new function () {
+        this.getInstance = function () {
+            if (instance == null) {
+                instance = new Kokua();
+                instance.constructeur = null;
+            }
+
+            return instance;
+        }
+    }
 })();
 
-var kokua = kokuaObject.getInstance();
+var kokua = KokuaObject.getInstance();
 kokua.init('1ed98kloix');
+
