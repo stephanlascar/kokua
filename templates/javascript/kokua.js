@@ -20,13 +20,43 @@ var KokuaObject = (function () {
             }
             setCookie('first_visit', false, 60 * 15);
 
-            this.startTracker();
+            startTracker.call(this);
 
             this.siteId = siteId;
             this.jsId = getCookie('js_id');
         };
 
-        this.startTracker = function () {
+        this.showButton = function () {
+            var element = document.createElement('img');
+            var referenceNode = document.getElementById('kokua');
+
+            element.setAttribute('src', "{{ url_for('static', filename='images/bouton.jpg') }}");
+            element.setAttribute('height', '50');
+            element.setAttribute('width', '100');
+            element.setAttribute('alt', 'Discuter');
+            element.style.cursor = 'pointer';
+            element.onclick = function () {
+                var iframe = document.createElement('iframe');
+                iframe.src = "{{ url_for('chat') }}";
+                iframe.scrolling = 'no';
+                iframe.frameBorder = '0';
+                iframe.style.position = 'fixed';
+                iframe.style.bottom = '0';
+                iframe.style.right = '10px';
+                iframe.style.width = '290px';
+                iframe.style.height = '400px';
+                iframe.style.backgroundColor = 'red';
+                iframe.style.borderTopLeftRadius = '5px';
+                iframe.style.borderTopRightRadius= '5px';
+                iframe.width = '100%';
+                iframe.height = '100%';
+                document.body.appendChild(iframe);
+            };
+
+            referenceNode.parentNode.insertBefore(element, referenceNode.nextSibling);
+        };
+
+        function startTracker () {
             var that = this;
             document.onmousemove = debounce(function (event) {
                 var params = {
@@ -57,7 +87,7 @@ var KokuaObject = (function () {
                 };
                 sendParams.call(that, params);
             }, 15000);
-        };
+        }
 
         function sendParams(params) {
             xhr.open('POST', '/sauron');
@@ -119,4 +149,5 @@ var KokuaObject = (function () {
 
 var kokua = KokuaObject.getInstance();
 kokua.init('1ed98kloix');
+kokua.showButton();
 

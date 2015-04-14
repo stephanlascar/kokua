@@ -1,6 +1,6 @@
 import os
 from elasticsearch import Elasticsearch
-from flask import Flask, request
+from flask import Flask, request, render_template
 from geoip import geolite2
 
 
@@ -11,6 +11,16 @@ app = Flask(__name__)
 @app.before_first_request
 def create_indexes():
     es.indices.create(index='sauron')
+
+
+@app.route('/kokua.js')
+def get_kokua_javascript():
+    return render_template('javascript/kokua.js')
+
+
+@app.route('/chat.html')
+def chat():
+    return render_template('chat.html')
 
 
 @app.route('/sauron', methods=['POST'])
