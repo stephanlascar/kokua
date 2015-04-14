@@ -6,11 +6,7 @@ from geoip import geolite2
 
 es = Elasticsearch([os.getenv('BONSAI_URL')])
 app = Flask(__name__)
-
-
-@app.before_first_request
-def create_indexes():
-    es.indices.create(index='sauron')
+app.config['DEBUG'] = True
 
 
 @app.route('/kokua.js')
@@ -36,6 +32,3 @@ def sauron():
     params['localization'] = localization.to_dict() if localization else dict()
     es.index(index='sauron', doc_type='surfer_events', body=params)
     return '', 200
-
-if __name__ == '__main__':
-    app.run(debug=True)

@@ -1,0 +1,29 @@
+body {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 12px;
+}
+
+#header {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    overflow: hidden;
+    z-index: 10;
+    height: 24px;
+    color: #E7EFD2;
+    background: none repeat scroll 0% 0% #78A400;
+}
+
+#header .title {
+    padding-left: 60px;
+    padding-right: 60px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: inherit;
+    text-align: center;
+    font-size: 11px;
+    line-height: 24px;
+    font-weight: bold;
+}
