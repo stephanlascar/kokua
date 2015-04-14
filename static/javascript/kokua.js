@@ -3,7 +3,7 @@ var KokuaObject = (function () {
 
         var xhr = new XMLHttpRequest();
 
-        this.init = function(siteId) {
+        this.init = function (siteId) {
             if (!getCookie('first_visit')) {
                 setCookie('js_id', randomId());
                 var params = {
@@ -49,7 +49,14 @@ var KokuaObject = (function () {
                     }
                 };
                 sendParams.call(that, params);
-            }
+            };
+
+            setInterval(function () {
+                var params = {
+                    type: 'ping'
+                };
+                sendParams.call(that, params);
+            }, 15000);
         };
 
         function sendParams(params) {
@@ -91,7 +98,7 @@ var KokuaObject = (function () {
 
                 clearTimeout(timer);
                 timer = setTimeout(function () {
-                   fn.apply(context, args);
+                    fn.apply(context, args);
                 }, delay);
             };
         }
