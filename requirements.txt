@@ -3,3 +3,4 @@ gunicorn==19.3.0
 elasticsearch==1.4.0
 python-geoip==1.2
 python-geoip-geolite2==2015.0303
+Flask-WTF==0.11

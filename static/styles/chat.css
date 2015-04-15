@@ -1,13 +1,14 @@
 body {
     font-family: Verdana, Geneva, sans-serif;
     font-size: 12px;
+    background-color: white;
 }
 
 #header {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
     overflow: hidden;
     z-index: 10;
     height: 24px;
@@ -26,4 +27,73 @@ body {
     font-size: 11px;
     line-height: 24px;
     font-weight: bold;
+}
+
+#container {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    bottom: 24px;
+    padding: 20px;
+}
+
+#container form {
+    height: 100%;
+}
+
+#container form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#container form input,
+#container form textarea {
+    border: 1px solid #DDD;
+    border-radius: 5px;
+    display: block;
+    -moz-appearance: none;
+    width: 100%;
+    color: #666;
+    background: none repeat scroll 0 0 #FFF;
+    padding: 6px;
+    margin-bottom: 15px;
+}
+
+#container form textarea {
+    resize: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 200px;
+}
+
+#container form input[type="submit"] {
+    background: none repeat scroll 0 0 #78A400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #FFF;
+    padding: 6px 3px;
+    border: 1px solid #5C8A00;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.25) inset;
+    font-weight: bold;
+    word-wrap: normal;
+    cursor: pointer;
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 24px;
+    line-height: 24px;
+    text-align: right;
+    color: #999;
+    padding: 0 10px 0 10px;
+    font-weight: bold;
+    font-size: 11px;
 }

@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 import os
 from elasticsearch import Elasticsearch
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 from geoip import geolite2
+from form.chat_login_form import ChatLoginForm
 
 
 es = Elasticsearch([os.getenv('BONSAI_URL')])
@@ -14,9 +16,12 @@ def get_kokua_javascript():
     return render_template('javascript/kokua.js')
 
 
-@app.route('/chat.html')
-def chat():
-    return render_template('chat.html')
+@app.route('/livechat.html', methods=('GET', 'POST'))
+def livechat():
+    form = ChatLoginForm()
+    if form.validate():
+        return redirect(url_for('chat2'))
+    return render_template('livechat.html', form=form)
 
 
 @app.route('/sauron', methods=['POST'])

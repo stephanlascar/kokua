@@ -1,0 +1,30 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Kokua chat</title>
+
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/reset.css')}}"/>
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/chat.css')}}"/>
+  </head>
+
+    <body>
+        <div id="header">
+            <div class="title">Live 24/5</div>
+        </div>
+        <div id="container">
+            <form method="post" action="{{ url_for('chat') }}">
+                {{ form.csrf_token }}
+                <label>{{ form.email.label.text }} *</label>
+                {{ form.email(placeholder='Email') }}
+                <label>{{ form.message.label.text }} *</label>
+                {{ form.message() }}
+                <input type="submit" value="Start Chatting"/>
+            </form>
+        </div>
+        <div id="footer">kokua</div>
+    </body>
+
+</html>
