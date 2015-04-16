@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
+import datetime
 from elasticsearch import Elasticsearch
 from flask import Flask, request, render_template, redirect, url_for
-from flask.ext.login import LoginManager, login_user
+from flask.ext.login import LoginManager, login_user, login_required
 from geoip import geolite2
 from form.chat_login_form import ChatLoginForm
 from security.user import User
@@ -17,7 +18,11 @@ login_manager = LoginManager(app)
 
 @login_manager.user_loader
 def load_user(js_id):
-    return {}
+    result = es.search(index='sauron', doc_type='surfer_emails',
+                       body={'size': 1,
+                             'query': {'filtered': {'filter': {'term': {'js_id': js_id}}}},
+                             'sort': {'datetime': {'order': 'desc'}}})
+    return User(js_id=js_id, email=result['hits']['hits'][0]['_source']['email'])
 
 
 @app.route('/kokua.js')
@@ -26,6 +31,7 @@ def get_kokua_javascript():
 
 
 @app.route('/test.html')
+@login_required
 def test():
     return 'okokok'
 
@@ -35,7 +41,8 @@ def livechat():
     form = ChatLoginForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            login_user(User(js_id=form.js_id, email=form.email))
+            es.index(index='sauron', doc_type='surfer_emails', body=dict(js_id=form.js_id.data, email=form.email.data, datetime=datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')))
+            login_user(User(js_id=form.js_id.data, email=form.email.data))
             return redirect(url_for('test'))
     else:
         form.js_id.data = request.args['js_id']
@@ -46,6 +53,7 @@ def livechat():
 def sauron():
     params = request.json
     localization = geolite2.lookup(request.remote_addr)
+    params['datetime'] = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
     params['ip'] = request.remote_addr
     params['user_agent'] = dict(header=request.user_agent.to_header(),
                                 browser=request.user_agent.browser,
