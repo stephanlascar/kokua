@@ -15,12 +15,13 @@
             <div class="title">Live 24/5</div>
         </div>
         <div id="container">
-            <form method="post" action="{{ url_for('chat') }}">
+            <form method="post" action="{{ url_for('livechat') }}">
                 {{ form.csrf_token }}
-                <label>{{ form.email.label.text }} *</label>
-                {{ form.email(placeholder='Email') }}
-                <label>{{ form.message.label.text }} *</label>
-                {{ form.message() }}
+                {{ form.js_id() }}
+                <label class="{{ 'error' if form.email.errors else ''}}">{{ form.email.label.text }} *</label>
+                {{ form.email(placeholder='Email', class='error' if form.email.errors else '') }}
+                <label class="{{ 'error' if form.message.errors else ''}}">{{ form.message.label.text }} *</label>
+                {{ form.message(class='error' if form.message.errors else '') }}
                 <input type="submit" value="Start Chatting"/>
             </form>
         </div>

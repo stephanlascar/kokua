@@ -27,6 +27,7 @@ var KokuaObject = (function () {
         };
 
         this.showButton = function () {
+            var that = this;
             var element = document.createElement('img');
             var referenceNode = document.getElementById('kokua');
 
@@ -37,7 +38,7 @@ var KokuaObject = (function () {
             element.style.cursor = 'pointer';
             element.onclick = function () {
                 var iframe = document.createElement('iframe');
-                iframe.src = "{{ url_for('livechat') }}";
+                iframe.src = "{{ url_for('livechat') }}?js_id=" + that.jsId;
                 iframe.scrolling = 'no';
                 iframe.frameBorder = '0';
                 iframe.style.position = 'fixed';

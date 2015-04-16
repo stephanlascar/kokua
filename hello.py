@@ -2,13 +2,22 @@
 import os
 from elasticsearch import Elasticsearch
 from flask import Flask, request, render_template, redirect, url_for
+from flask.ext.login import LoginManager, login_user
 from geoip import geolite2
 from form.chat_login_form import ChatLoginForm
+from security.user import User
 
 
 es = Elasticsearch([os.getenv('BONSAI_URL')])
 app = Flask(__name__)
 app.config['DEBUG'] = True
+app.secret_key = os.getenv('SECRET_KEY', 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT')
+login_manager = LoginManager(app)
+
+
+@login_manager.user_loader
+def load_user(js_id):
+    return {}
 
 
 @app.route('/kokua.js')
@@ -16,11 +25,20 @@ def get_kokua_javascript():
     return render_template('javascript/kokua.js')
 
 
+@app.route('/test.html')
+def test():
+    return 'okokok'
+
+
 @app.route('/livechat.html', methods=('GET', 'POST'))
 def livechat():
     form = ChatLoginForm()
-    if form.validate():
-        return redirect(url_for('chat2'))
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            login_user(User(js_id=form.js_id, email=form.email))
+            return redirect(url_for('test'))
+    else:
+        form.js_id.data = request.args['js_id']
     return render_template('livechat.html', form=form)
 
 

@@ -61,6 +61,15 @@ body {
     margin-bottom: 15px;
 }
 
+#container form .error {
+    color: #CC0000;
+}
+
+#container form input.error,
+#container form textarea.error {
+    border-color: #CC0000;
+}
+
 #container form textarea {
     resize: none;
     -webkit-box-sizing: border-box;
