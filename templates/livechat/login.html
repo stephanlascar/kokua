@@ -15,7 +15,7 @@
             <div class="title">Live 24/5</div>
         </div>
         <div id="container">
-            <form method="post" action="{{ url_for('livechat') }}">
+            <form method="post" action="{{ url_for('livechat.index') }}">
                 {{ form.csrf_token }}
                 {{ form.js_id() }}
                 <label class="{{ 'error' if form.email.errors else ''}}">{{ form.email.label.text }} *</label>

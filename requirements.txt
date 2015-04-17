@@ -5,4 +5,3 @@ python-geoip==1.2
 python-geoip-geolite2==2015.0303
 Flask-WTF==0.11
 Flask-Login==0.2.11
-pytz==2015.2

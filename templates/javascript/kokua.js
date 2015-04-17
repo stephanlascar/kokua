@@ -38,7 +38,7 @@ var KokuaObject = (function () {
             element.style.cursor = 'pointer';
             element.onclick = function () {
                 var iframe = document.createElement('iframe');
-                iframe.src = "{{ url_for('livechat') }}?js_id=" + that.jsId;
+                iframe.src = "{{ url_for('livechat.index') }}?js_id=" + that.jsId;
                 iframe.scrolling = 'no';
                 iframe.frameBorder = '0';
                 iframe.style.position = 'fixed';
