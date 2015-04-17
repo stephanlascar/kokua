@@ -1,5 +1,47 @@
 {% extends "livechat/layout.html" %}
 
 {% block content %}
-okokok
+    <div id="agent-presentation">
+        <img src="{{ url_for('static', filename='images/concierge.png') }}" alt="avatar"/>
+        <h4>James Bond</h4>
+        <span>Ask me anything</span>
+    </div>
+    <div id="chat-panel">
+        <div class="bubble">
+            <img src="{{ url_for('static', filename='images/concierge.png') }}" alt="avatar" class="avatar"/>
+            <div class="text">
+                <p>Mon super message de la mort ! En en plus super long...</p>
+                <p>Mon super message de la mort ! En en plus super long...</p>
+            </div>
+        </div>
+        <div class="notification">Jame Bond joined the chat</div>
+        <div class="bubble me">
+            <img src="{{ url_for('static', filename='images/anonymous.png') }}" alt="avatar" class="avatar"/>
+            <div class="text">
+                <p>Mon super message de la mort ! En en plus super long...</p>
+                <p>Mon super message de la mort ! En en plus super long...</p>
+            </div>
+        </div>
+        <div class="bubble">
+            <img src="{{ url_for('static', filename='images/concierge.png') }}" alt="avatar" class="avatar"/>
+            <div class="text">
+                <p>Mon super message de la mort !</p>
+            </div>
+        </div>
+        <div class="bubble me">
+            <img src="{{ url_for('static', filename='images/anonymous.png') }}" alt="avatar" class="avatar"/>
+            <div class="text">
+                <p>Mon super message de la mort ! En en plus super long...</p>
+                <p>Mon super message de la mort ! En en plus super long...</p>
+                <p>Mon super message de la mort ! En en plus super long...</p>
+            </div>
+        </div>
+    </div>
+    <div id="chat-textarea">
+        <textarea placeholder="Type your message here"></textarea>
+    </div>
+{% endblock %}
+
+{% block menu %}
+    <div class="menu">Options</div>
 {% endblock %}
