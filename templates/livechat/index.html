@@ -10,8 +10,8 @@
         <div class="bubble me">
             <img src="{{ url_for('static', filename='images/anonymous.png') }}" alt="avatar" class="avatar"/>
             <div class="text">
-                {% for event in previous_conversations['hits']['hits'] %}
-                    <p>{{ event['_source']['message'] }}</p>
+                {% for message in previous_messages %}
+                    <p>{{ message['body'] }}</p>
                 {% endfor %}
             </div>
         </div>

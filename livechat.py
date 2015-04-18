@@ -17,11 +17,7 @@ def login():
         mongo.db.users.update({'email': form.email.data, 'role': 'visitor'}, {'$addToSet': {'js_id': form.js_id.data}}, upsert=True)
         mongo_user = mongo.db.users.find_one({'email': form.email.data, 'role': 'visitor'})
         login_user(User(mongo_user['_id'], form.email.data, 'visitor'), remember=True)
-        es.index(index='sauron', doc_type='conversations', body={
-            'datetime': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-            'from': form.email.data,
-            'message': form.message.data
-        })
+        mongo.db.conversations.insert({'datetime': datetime.datetime.utcnow(), 'from': form.email.data, 'body': form.message.data})
         current_app.logger.info(mongo_user)
         return redirect('livechat/index.html')
     form.js_id.data = request.args['js_id']
@@ -31,7 +27,7 @@ def login():
 @livechat.route('/livechat/index.html')
 def index():
     if current_user.is_authenticated():
-        previous_conversations = es.search(index='sauron', doc_type='conversations', q='from:{email}'.format(email=current_user.email))
-        return render_template('livechat/index.html', previous_conversations=previous_conversations)
+        previous_messages = mongo.db.conversations.find({'from': current_user.email})
+        return render_template('livechat/index.html', previous_messages=previous_messages)
     else:
-        return redirect(url_for('livechat.login'))
+        return redirect(url_for('livechat.login', js_id=request.args['js_id']))
