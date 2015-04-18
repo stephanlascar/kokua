@@ -1,22 +1,30 @@
 # -*- coding: utf-8 -*-
 import os
 import datetime
-from elasticsearch import Elasticsearch
-from flask import Flask, request, render_template, redirect, url_for
-from flask.ext.login import login_user, login_required
+from flask import Flask, request, render_template
 from geoip import geolite2
-from form.chat_login_form import ChatLoginForm
+import pymongo
+from database import mongo
+from security import login_manager
 from livechat import livechat
-from security.user import AnonymousUser
+from notification import notification
 
 
-#es = Elasticsearch([os.getenv('BONSAI_URL')])
 app = Flask(__name__)
 app.config['DEBUG'] = True
 app.secret_key = os.getenv('SECRET_KEY', 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT')
+app.config['MONGO_URI'] = os.getenv('MONGOLAB_URI')
 
 
+mongo.init_app(app)
+login_manager.init_app(app)
 app.register_blueprint(livechat)
+app.register_blueprint(notification)
+
+
+@app.before_first_request
+def create_mongo_index():
+    mongo.db.bookmarks.ensure_index([('user.email', pymongo.ASCENDING), ('role', pymongo.ASCENDING)], background=True, unique=True)
 
 
 @app.route('/kokua.js')

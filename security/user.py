@@ -1,18 +1,10 @@
 # -*- coding: utf-8 -*-
-from flask.ext.login import AnonymousUserMixin
+from flask.ext.login import UserMixin
 
 
-class AnonymousUser(AnonymousUserMixin):
+class User(UserMixin):
 
-    def __init__(self, js_id, email):
+    def __init__(self, _id, email, _type):
         self.email = email
-        self.js_id = js_id
-
-    def is_authenticated(self):
-        return False
-
-    def is_active(self):
-        return True
-
-    def get_id(self):
-        return self.js_id
+        self.type = _type
+        self.id = _id

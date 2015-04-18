@@ -7,6 +7,14 @@
         <span>Ask me anything</span>
     </div>
     <div id="chat-panel">
+        <div class="bubble me">
+            <img src="{{ url_for('static', filename='images/anonymous.png') }}" alt="avatar" class="avatar"/>
+            <div class="text">
+                {% for event in previous_conversations['hits']['hits'] %}
+                    <p>{{ event['_source']['message'] }}</p>
+                {% endfor %}
+            </div>
+        </div>
         <div class="bubble">
             <img src="{{ url_for('static', filename='images/concierge.png') }}" alt="avatar" class="avatar"/>
             <div class="text">
@@ -43,5 +51,22 @@
 {% endblock %}
 
 {% block menu %}
-    <div class="menu">Options</div>
+    <div class="menu">Options</div> - {{ current_user.email }}
+{% endblock %}
+
+{% block javascript %}
+    <script type="application/javascript" src="http://js.pusher.com/2.2/pusher.min.js"></script>
+    <script type="application/javascript">
+        (function () {
+            // Enable pusher logging - don't include this in production
+            Pusher.log = function(message) {
+                if (window.console && window.console.log) {
+                    window.console.log(message);
+                }
+            };
+
+            var pusher = new Pusher('2d0a46ebffcf7a4f3eb0');
+            var presenceWaitingQueueChannel = pusher.subscribe('presence-waiting-queue');
+        })();
+    </script>
 {% endblock %}
